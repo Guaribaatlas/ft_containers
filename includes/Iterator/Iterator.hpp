@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 12:10:53 by jehaenec          #+#    #+#             */
-/*   Updated: 2021/11/25 12:21:53 by jehaenec         ###   ########.fr       */
+/*   Updated: 2021/11/25 23:22:25 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@
 #include <memory>
 #include <iterator>
 
-namespace ft{
-
+namespace ft
+{
     template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
-    struct iterator {
+    struct iterator
+    {
         typedef T         value_type;
         typedef Distance  difference_type;
         typedef Pointer   pointer;
@@ -32,10 +33,12 @@ namespace ft{
     struct bidirectionnal_iterator_tag{};
     struct forward_iterator_tag{};
     struct randomaccess_iterator_tag{};
+    struct reverse_iterator_tag{};
 
 
     template< class Iter >
-    struct iterator_traits{
+    struct iterator_traits
+    {
             typedef typename Iter::Difference_type Difference_type;
             typedef typename Iter::Pointer   pointer;
             typedef typename Iter::Reference reference;
@@ -43,7 +46,8 @@ namespace ft{
     };  
 
     template< class T >
-    struct iterator_traits<T*>{
+    struct iterator_traits<T*>
+    {
             typedef typename std::ptrdiff_t             Difference_type;
             typedef typename T*                         pointer;
             typedef typename T&                         reference;
@@ -51,7 +55,8 @@ namespace ft{
     };
 
     template< class T >
-    struct iterator_traits<const T*>{
+    struct iterator_traits<const T*>
+    {
             typedef typename std::ptrdiff_t             Difference_type;
             typedef typename T*                         pointer;
             typedef typename T&                         reference;

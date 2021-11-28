@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:29:16 by jehaenec          #+#    #+#             */
-/*   Updated: 2021/11/25 14:56:22 by jehaenec         ###   ########.fr       */
+/*   Updated: 2021/11/25 23:23:42 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 #include "Iterator.hpp"
 
-namespace ft{
+namespace ft
+{
     template <typename T, class not_const_T =T>
     class random_access_iterator : public ft::iterator<random_access_iterator_tag>
     {
@@ -43,14 +44,37 @@ namespace ft{
             this->_ptr = origin.getPtr();
             return (*this)
         }
+        random_access_iterator & operator-=(difference_type n){
+            this->_ptr -= n;
+            return (*this)
+        }
+        random_access_iterator & operator+=(difference_type n){
+            this->_ptr += n;
+            return (*this)
+        }
+        random_access_iterator & operator+=(difference_type n){
+            this->_ptr += n;
+            return (*this)
+        }
+        
+        pointer base() const{
+            return (this->_ptr);
+        }
+        
+        pointer operator->(){
+            return (this->_ptr);
+        } 
 
-        const pointer getPtr()const{
-            return (this->ptr);
+        reference operator*(){
+            return (*this->_ptr);
+        }
+        reference operator[](int i){
+            return(this->ptr[i]);
         }
         //
         //INCREMENT + DECREMENT
         //
-        random_access_iterator operator++(){
+        random_access_iterator & operator++(){
             this->_ptr++;
             return (*this);
         }
@@ -59,7 +83,7 @@ namespace ft{
             this->ptr++;
             return (tmp);
         }
-        random_access_iterator operator--(){
+        random_access_iterator  & operator--(){
             this->_ptr--;
             return (*this);
         }
@@ -71,30 +95,49 @@ namespace ft{
         //
         //OVERLOAD COMPARE OPERATOR
         //
-        bool operator!=(const random_access_iterator<not_const_T> &other){
-            return (this->getPtr() != other.getPtr());
+        
+        private:
+            pointer _ptr;   
+    };
+
+    
+    template <class Iterator1, class Iterator2>
+    bool operator!=(const random_access_iterator<Iterator1> &a, const random_access_iterator<Iterator2> &b){
+            return (a.base() != b.base());
+            }
+    template <class Iterator1, class Iterator2>
+    bool operator==(const random_access_iterator<Iterator1> &a, const random_access_iterator<Iterator2> &b){
+            return (a.base() == b.base());
         }
-        bool operator==(const random_access_iterator<not_const_T> &other){
-            return (this->getPtr() == other.getPtr());
+    template <class Iterator1, class Iterator2>
+    bool operator>=(const random_access_iterator<Iterator1> &a, const random_access_iterator<Iterator2> &b){
+            return (a.base() >= b.base());
         }
-        bool operator>(const random_access_iterator<not_const_T> &other){
-            return (this->getPtr() > other.getPtr());
+    template <class Iterator1, class Iterator2>
+    bool operator<=(const random_access_iterator<Iterator1> &a, const random_access_iterator<Iterator2> &b){
+            return (a.base() <= b.base());
         }
-        bool operator<(const random_access_iterator<not_const_T> &other){
-            return (this->getPtr() < other.getPtr());
+    template <class Iterator1, class Iterator2>
+    bool operator<(const random_access_iterator<Iterator1> &a, const random_access_iterator<Iterator2> &b){
+            return (a.base() < b.base());
         }
-        bool operator>=(const random_access_iterator<not_const_T> &other){
-            return (this->getPtr() >= other.getPtr());
-        }
-        bool operator<=(const random_access_iterator<not_const_T> &other){
-            return (this->getPtr() <= other.getPtr());
+    template <class Iterator1, class Iterator2>
+    bool operator>(const random_access_iterator<Iterator1> &a, const random_access_iterator<Iterator2> &b){
+            return (a.base() > b.base());
         }
         //
         // ADDITION + SOUSTRACTION OVERLOAD
         //
-        private:
-            pointer _ptr;   
-    };
-};
+
+    template <class Iterator>
+    random_access_iterator<Iterator> operator+(const random_access_iterator<Iterator> &a, typename random_access_iterator<Iterator>::difference_type b){
+            return (random_access_iterator<Iterator1>(a.base() + b));
+        }
+    template <class Iterator1, class Iterator2>
+    typename random_access_iterator<Iterator1>::difference_type operator-(const random_access_iterator<Iterator1> &a, const random_access_iterator<Iterator2> &b){
+            return (a.base() - b.base());
+            
+        }
+}
 
 #endif
