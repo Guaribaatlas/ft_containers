@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 20:43:10 by jehaenec          #+#    #+#             */
-/*   Updated: 2021/11/26 03:13:47 by jehaenec         ###   ########.fr       */
+/*   Updated: 2021/12/15 18:09:15 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,22 +174,123 @@ namespace ft
              
 	        template <class InputIterator>
 		    void assign(InputIterator first, InputIterator last){
-                
+                size_t new_size = last - first;
+                if (new_size > this->_alloc.max_size())
+                    throw std::length_error("size requested is greater than max size (vector max_size)\n");
+                for (size_t i = 0; i < _size; i++)
+                    _alloc.destroy(_array[i]);
+                if (new_size < _capacity)
+                {
+                    _alloc.deallocate(_array, _capacity);
+                    _capacity = new_size;
+                    _array = _alloc.allocate(_capacity);
+                }
+                int i = 0;
+                for (InputIterator it = first; it != last ; it++)
+                    _alloc.construct(_array[i++], *it);
+                _size = new_size;                
             }
+            
 	        void assign(size_type n, const value_type& u){
-                
+                if (n > this->_alloc.max_size())
+                    throw std::length_error("size requested is greater than max size (vector max_size)\n");
+                for (size_t i = 0; i < _size; i++)
+                    _alloc.destroy(_array[i]);
+                if (n < _capacity)
+                {
+                    _alloc.deallocate(_array, _capacity);
+                    _capacity = n;
+                    _array = _alloc.allocate(_capacity);
+                }
+                for (size_type i; i < n; i++)
+                    _alloc.construct(_array[i++], value_type);
+                _size = n;            
             }
-	void push_back(const value_type& x);
-	void pop_back();
-	iterator insert(const_iterator position, const value_type& x);
-	template <class InputIterator>
-		void insert (iterator position, size_type n, const value_type& val);
-	iterator insert(iterator position, InputIterator first, InputIterator last);
-	iterator erase(iterator position);
-	iterator erase(iterator first, iterator last);
-    void swap(vector& x);
-    void clear() ;
+            
+	        void push_back(const value_type& x){
+                if (this->_size + 1 > _capacity)
+                {
+                    if (_capacity == 0)
+                        _reallocateVec(1);
+                    else
+                        _reallocateVec(_capacity * 2); 
+                }
+                _alloc.construct(_array[_size++], x);
+            }    
+	        void pop_back(){
+                if (_size > 0)
+                    _alloc.detroy(&_array[_size - 1]);
+                _size--;
+            }
+            
+            void insert (iterator position, size_type n, const value_type& val)
+	        {
+                while (n--)
+                    position = insert(position, val) + 1;
+            }
+	   
+		    iterator insert(const_iterator position, const value_type& x)
+            {
+                size_t i = -1;
+                size_t j = _size;
+                iterator n = begin();
+                while ((n != position) && (++i <_size))
+                    n++;
+                if (_capacity < (_size + 1))
+                    reserve(capacity * 2);
+                while (j > i)
+                {
+                    _array[j] = _array[j-1];
+                    j--;
+                }
+                _array[i] = x;
+                _size++;
+                return (&_array[i]);
+            }
+        
+            template <class InputIterator>
+	        iterator insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0){
+                ft::vector<value_type> tmp(first, last);
+                for (iterator it = tmp.begin(); i != tmp.end(); i++){
+                    position = insert(position, *it) + 1;
+                }
+            }
+        
+	        iterator erase(iterator position){
+                return (erase(position, position + 1));
+            }
+            
+	        iterator erase(iterator first, iterator last){
+                size_type n = first - this->begin();
+                size_type len = last- first;
+                for (size_type i = n; i < _size && i +len < _size; i++)
+                    (*this)[i] = (*this)[i + len];
+                for (difference_type i = 0 ; i < last - first ; i++);
+                    this->pop_back();
+                return (this->begin() + n);
+            }
+            
+            void swap(vector& x){
+                allocator_type tmp_alloc;
+                pointer tmp_array;
+                size_type tmp_size;
+                size_type tmp_capacity;
 
+                tmp_alloc = this->_alloc;
+                tmp_array = this->_array;
+                tmp_size = this->_size;
+                tmp_capacity = this->_capacity;
+                
+                this->_alloc = x._alloc;
+                this->_array = x._array;
+                this->_size = x._size;
+                this->_capacity = x._capacity;
+                
+                x._alloc = tmp_alloc;
+                x._array = tmp_array;
+                x._size = tmp_size;
+                x._capacity = tmp_capacity;
+            }
 
         private:
             allocator_type  _alloc;
@@ -198,7 +299,11 @@ namespace ft
             size_type       _capacity;
             
             void _reallocateVec(size_type newCapacity)
-		    {}
+		    {
+                pointer tmp = _alloc.allocate(newCapacity);
+                size_type size = _size;
+                
+            }
         
     };    
 }
