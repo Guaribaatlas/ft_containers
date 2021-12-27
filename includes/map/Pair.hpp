@@ -37,7 +37,7 @@ namespace ft
         }
 
         bool operator<(const ft::pair<T1, T2> &cmp) const{
-            return (cmp§)
+            return (cmp)
         }
 
         bool operator>(const ft::pair<T1, T2> &cmp) const{
