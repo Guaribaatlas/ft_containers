@@ -17,7 +17,7 @@ namespace ft
 		bool	color;
 		bool	check;
 
-		Node* descend_left(){
+		Node* down_left(){
 			Node *where = this;
 			if (where->is_null())
 				return (nullptr);
@@ -26,7 +26,7 @@ namespace ft
 			return (where);
 		}
 
-		Node* descend_right(){
+		Node* down_right(){
 			Node *where = this;
 			if (where->is_null())
 				return (nullptr);
