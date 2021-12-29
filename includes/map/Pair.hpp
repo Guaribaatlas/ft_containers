@@ -37,19 +37,19 @@ namespace ft
         }
 
         bool operator<(const ft::pair<T1, T2> &cmp) const{
-            return (cmp)
+            return (this->first < cmp.first || (!(cmp.first < this->first) && this->second < cmp.second))
         }
 
         bool operator>(const ft::pair<T1, T2> &cmp) const{
-
+            return (cmp < *this)
         }
 
         bool operator<=(const ft::pair<T1, T2> &cmp) const{
-
+            return !(cmp < *this)
         }
 
         bool operator>=(const ft::pair<T1, T2> &cmp) const{
-
+            return !(*this < cmp)
         }
 
     };
