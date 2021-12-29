@@ -301,7 +301,7 @@ namespace ft
 			node->color = 0;
 		}
 
-		void preOrderHelper(node_ptr node) //HERE2?
+		void preOrderHelper(node_ptr node)
 		{
 			if (node != _tnull)
 			{
