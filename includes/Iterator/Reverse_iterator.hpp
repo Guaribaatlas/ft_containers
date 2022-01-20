@@ -18,14 +18,14 @@
 namespace ft
 {
     template <typename T, class not_const_T =T>
-    class reverse_iterator : public iterator<random_access_iterator_tag>
+    class reverse_iterator : public iterator<random_access_iterator_tag, T>
     {
         public:
-            typename typedef iterator<random_access_iterator_tag, T>::iterator_category     iterator_category;
-            typename typedef iterator<random_access_iterator_tag, T>::pointer               pointer;
-            typename typedef iterator<random_access_iterator_tag, T>::reference             reference;
-            typename typedef iterator<random_access_iterator_tag, T>::value_type            value_type;
-            typename typedef iterator<random_access_iterator_tag, T>::difference_type       difference_type;
+            typedef typename iterator<random_access_iterator_tag, T>::iterator_category     iterator_category;
+            typedef typename iterator<random_access_iterator_tag, T>::pointer               pointer;
+            typedef typename iterator<random_access_iterator_tag, T>::reference             reference;
+            typedef typename iterator<random_access_iterator_tag, T>::value_type            value_type;
+            typedef typename iterator<random_access_iterator_tag, T>::difference_type       difference_type;
         //
         //CONSTRUCTOR + DESTRUCTOR + ASSIGNATION OVERLOAD
         //
@@ -38,21 +38,21 @@ namespace ft
         reverse_iterator(pointer pointer): _ptr(pointer){
         }
         
-        virtual ~random_access_iterator(){}
+        virtual ~reverse_iterator(){}
         
         reverse_iterator & operator=(const reverse_iterator<not_const_T> &origin){
             this->_ptr = origin.getPtr();
-            return (*this)
+            return (*this);
         }
         
         reverse_iterator & operator-=(difference_type n){
             this->_ptr += n;
-            return (*this)
+            return (*this);
         }
         
         reverse_iterator & operator+=(difference_type n){
             this->_ptr -= n;
-            return (*this)
+            return (*this);
         }
         
         pointer base() const{
@@ -90,10 +90,7 @@ namespace ft
             this->ptr++;
             return (tmp);
         }
-        //
-        //OVERLOAD COMPARE OPERATOR
-        //
-        
+
         private:
             pointer _ptr;   
     };
@@ -129,7 +126,7 @@ namespace ft
 
     template <class Iterator>
     reverse_iterator<Iterator> operator+(const reverse_iterator<Iterator> &a, typename reverse_iterator<Iterator>::difference_type b){
-            return (random_access_iterator<Iterator1>(a.base() + b));
+            return (reverse_iterator<Iterator>(a.base() + b));
         }
     template <class Iterator1, class Iterator2>
     typename reverse_iterator<Iterator1>::difference_type operator-(const reverse_iterator<Iterator1> &a, const reverse_iterator<Iterator2> &b){

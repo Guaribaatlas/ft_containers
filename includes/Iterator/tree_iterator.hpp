@@ -23,7 +23,7 @@
 namespace ft
 {
   template< class T, class Tree, class not_const_tree = Tree >
-  class TreeIterator  : public ft::Iterator< T, Tree >
+  class TreeIterator  : public ft::iterator< T, Tree >
   {
     public:
         	typedef typename Tree::value_type					value_type;
@@ -31,7 +31,7 @@ namespace ft
 			typedef typename Tree::mapped_type					mapped_type;
 			typedef	typename Tree::key_compare					key_compare;
 
-			typedef	typename not_const_Tree::Node				Node;
+			typedef	typename not_const_tree::Node				Node;
 
 			typedef typename Tree::reference					reference;
 			typedef const value_type&							const_reference;
@@ -124,7 +124,7 @@ namespace ft
         }
         
         Node * forward(Node * cursor){
-            if (cursor && cursor.right_child && !(cursor.right_child.is_tnull()))
+            if (cursor && cursor->right_child && !(cursor->right_child.is_tnull()))
                 return (cursor->right_child.down_left());
             else
             {
@@ -137,7 +137,7 @@ namespace ft
                 }
                 cursor = p;
                 if (cursor == nullptr)
-                    return (ref_to_null);
+                    return (ref_to_tnull);
             }
             return (cursor);
         }
@@ -145,7 +145,7 @@ namespace ft
         Node * backward(Node * cursor){
             if (cursor->is_tnull())
             {
-                if (!(this->_root->is_tnull())
+                if (!(this->_root->is_tnull()))
                     return (this->_root->down_right());
                 return (cursor);
             }
@@ -162,7 +162,7 @@ namespace ft
                 }
                 cursor = p;
                 if (cursor == nullptr)
-                    return (ref_to_null);
+                    return (ref_to_tnull);
             }
             return (cursor);
         }

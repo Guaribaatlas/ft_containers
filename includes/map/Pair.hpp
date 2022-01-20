@@ -15,8 +15,8 @@ namespace ft
         pair():first(), second(){
         }
 
-        template <classe T1, class T2>
-        pair(const pair<T1,T2> &origin): first(origin.first), second(origin.second){
+        template <class A, class B>
+        pair(const pair<A, B> &origin): first(origin.first), second(origin.second){
         }
 
         pair(const first_type &a, const second_type &b): first(a), second(b){
@@ -33,26 +33,30 @@ namespace ft
         }
 
         bool operator!=(const ft::pair<T1, T2> &cmp) const{
-            return (cmp.first != this.first && cmp.second != this->second);
+            return (cmp.first != this->first && cmp.second != this->second);
         }
 
         bool operator<(const ft::pair<T1, T2> &cmp) const{
-            return (this->first < cmp.first || (!(cmp.first < this->first) && this->second < cmp.second))
+            return (this->first < cmp.first || (!(cmp.first < this->first) && this->second < cmp.second));
         }
 
         bool operator>(const ft::pair<T1, T2> &cmp) const{
-            return (cmp < *this)
+            return (cmp < *this);
         }
 
         bool operator<=(const ft::pair<T1, T2> &cmp) const{
-            return !(cmp < *this)
+            return !(cmp < *this);
         }
 
         bool operator>=(const ft::pair<T1, T2> &cmp) const{
-            return !(*this < cmp)
+            return !(*this < cmp);
         }
 
     };
+    template <class T1, class T2>
+	pair<T1, T2> make_pair(T1 x, T2 y){
+		return (pair<T1, T2>(x, y));
+	}
 };
 
 #endif

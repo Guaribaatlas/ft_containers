@@ -30,11 +30,11 @@ namespace ft
         typedef Category  iterator_category;
      };
      
-    struct bidirectionnal_iterator_tag{};
-    struct forward_iterator_tag{};
-    struct randomaccess_iterator_tag{};
-    struct reverse_iterator_tag{};
-
+   
+        struct forward_iterator_tag{};
+        struct random_access_iterator_tag{};
+        struct reverse_iterator_tag{};
+        struct bidirectional_iterator_tag{};
 
     template< class Iter >
     struct iterator_traits
@@ -48,19 +48,19 @@ namespace ft
     template< class T >
     struct iterator_traits<T*>
     {
-            typedef typename std::ptrdiff_t             Difference_type;
-            typedef typename T*                         pointer;
-            typedef typename T&                         reference;
-            typedef typename Random_access_iterator     iterator_category;
+            typedef std::ptrdiff_t             Difference_type;
+            typedef T*                         pointer;
+            typedef T&                         reference;
+            typedef random_access_iterator_tag     iterator_category;
     };
 
     template< class T >
     struct iterator_traits<const T*>
     {
-            typedef typename std::ptrdiff_t             Difference_type;
-            typedef typename T*                         pointer;
-            typedef typename T&                         reference;
-            typedef typename Random_access_iterator     iterator_category;
+            typedef std::ptrdiff_t             Difference_type;
+            typedef T*                         pointer;
+            typedef T&                         reference;
+            typedef random_access_iterator_tag    iterator_category;
     };
 }
 

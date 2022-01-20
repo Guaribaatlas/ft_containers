@@ -10,10 +10,10 @@ namespace ft
     struct Node
     {
         typedef T value_type;
-        value_type D;
-        Node    parent;
-		Node	left_child;
-		Node	right_child;
+        value_type data;
+        Node    *parent;
+		Node	*left_child;
+		Node	*right_child;
 		bool	color;
 		bool	check;
 

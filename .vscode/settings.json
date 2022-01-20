@@ -1,6 +1,13 @@
 {
     "files.associations": {
         "algorithm": "cpp",
-        "__functional_base": "cpp"
+        "__functional_base": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "iterator": "cpp",
+        "map": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "vector": "cpp"
     }
 }

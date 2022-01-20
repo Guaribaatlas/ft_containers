@@ -37,7 +37,7 @@ namespace ft
 		    key_compare												_comp;
 
         public:
-            class value_compare : public std::binary_fonction<value_type, value_type, bool>
+            class value_compare : public std::binary_function<value_type, value_type, bool>
             {
                 class RBTree;
                 private:
@@ -45,7 +45,7 @@ namespace ft
                 public:
                     value_compare(const key_compare &x): comp(x){
                     }
-                    bool operator()(const value_type&x, onst value_type &y) const{
+                    bool operator()(const value_type&x, const value_type &y) const{
                         return (comp(x.first, y.first));
                     }
             };
@@ -87,7 +87,7 @@ namespace ft
             node_ptr copy_tree(node_ptr parent, node_ptr node, const node_ptr ref){
                 if (ref && !ref->check)
                 {
-                    node = copy_node(parent, nodem ref);
+                    node = copy_node(parent, node,  ref);
                     if (ref->left_child && !ref->left_child->check)
                         node->left_child = copy_tree(node, node->left_child, ref->left_child);
                     if (ref->right_child && !ref->right_child->check)
@@ -107,14 +107,14 @@ namespace ft
                 return (node);
             }
 
-            ~RBTree(){
+            ~RBtree(){
                 this->clear();
                 this->_node_alloc.deallocate(this->_tnull, 1);
             }
 
             void clear(){
                 this->destroy_tree(this->_root);
-                this->root = his->_tnull;
+                this->_root = this->_tnull;
             }
 
             void destroy_tree(node_ptr node){
@@ -128,7 +128,7 @@ namespace ft
 
             node_ptr begin_node() const{
                 if (this->_root && !(this->root == this->_tnull))
-                    return (this->minimum(this->root));
+                    return (this->minimum(this->_root));
                 return (this->_tnull);          
             }
 
@@ -329,6 +329,20 @@ namespace ft
 				postOrderHelper(node->right_child);
 				std::cout << node->data << " ";
 			}
+		}
+
+		node_ptr searchTreeHelper(node_ptr node, value_type key)
+		{
+			if (node == _tnull || key == node->data)
+			{
+				return node;
+			}
+
+			if (this->_comp(key.first, node->data.first))
+			{
+				return searchTreeHelper(node->left, key);
+			}
+			return searchTreeHelper(node->right, key);
 		}
 
         void fixDelete(node_ptr x)
@@ -614,7 +628,7 @@ namespace ft
 
 		public:
 
-		void 	swap(RBTree &x) {
+		void 	swap(RBtree &x) {
 			node_ptr temp = this->_root;
 			this->_root = x._root;
 			x._root = temp;

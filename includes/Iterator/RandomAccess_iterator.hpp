@@ -18,14 +18,14 @@
 namespace ft
 {
     template <typename T, class not_const_T =T>
-    class random_access_iterator : public ft::iterator<random_access_iterator_tag>
+    class random_access_iterator : public ft::iterator<random_access_iterator_tag, T>
     {
         public:
-            typename typedef ft::iterator<random_access_iterator_tag, T>::iterator_category     iterator_category;
-            typename typedef ft::iterator<random_access_iterator_tag, T>::pointer               pointer;
-            typename typedef ft::iterator<random_access_iterator_tag, T>::reference             reference;
-            typename typedef ft::iterator<random_access_iterator_tag, T>::value_type            value_type;
-            typename typedef ft::iterator<random_access_iterator_tag, T>::difference_type       difference_type;
+            typedef typename ft::iterator<random_access_iterator_tag, T>::iterator_category     iterator_category;
+            typedef typename ft::iterator<random_access_iterator_tag, T>::pointer               pointer;
+            typedef typename ft::iterator<random_access_iterator_tag, T>::reference             reference;
+            typedef typename ft::iterator<random_access_iterator_tag, T>::value_type            value_type;
+            typedef typename ft::iterator<random_access_iterator_tag, T>::difference_type       difference_type;
         //
         //CONSTRUCTOR + DESTRUCTOR + ASSIGNATION OVERLOAD
         //
@@ -42,21 +42,17 @@ namespace ft
         
         random_access_iterator & operator=(const random_access_iterator<not_const_T> &origin){
             this->_ptr = origin.getPtr();
-            return (*this)
+            return (*this);
         }
         random_access_iterator & operator-=(difference_type n){
             this->_ptr -= n;
-            return (*this)
+            return (*this);
         }
         random_access_iterator & operator+=(difference_type n){
             this->_ptr += n;
-            return (*this)
+            return (*this);
         }
-        random_access_iterator & operator+=(difference_type n){
-            this->_ptr += n;
-            return (*this)
-        }
-        
+
         pointer base() const{
             return (this->_ptr);
         }
@@ -131,7 +127,7 @@ namespace ft
 
     template <class Iterator>
     random_access_iterator<Iterator> operator+(const random_access_iterator<Iterator> &a, typename random_access_iterator<Iterator>::difference_type b){
-            return (random_access_iterator<Iterator1>(a.base() + b));
+            return (random_access_iterator<Iterator>(a.base() + b));
         }
     template <class Iterator1, class Iterator2>
     typename random_access_iterator<Iterator1>::difference_type operator-(const random_access_iterator<Iterator1> &a, const random_access_iterator<Iterator2> &b){

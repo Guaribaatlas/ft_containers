@@ -5,10 +5,11 @@
 # include <string>
 # include <memory>
 # include <map>
-# include "pair.hpp"
-# include "tree.hpp"
-# include "../iterator/tree_iterator.hpp"
-# include "../iterator/reverse_iterator.hpp"
+# include "Pair.hpp"
+# include "Tree.hpp"
+# include "../Iterator/tree_iterator.hpp"
+# include "../Iterator/Reverse_iterator.hpp"
+# include "../utils.hpp"
 
 namespace ft
 {
@@ -28,10 +29,10 @@ namespace ft
 		typedef typename allocator_type::difference_type		difference_type;
 		
 	private:
-		typedef RBTree<value_type, key_compare, allocator_type> 				tree;
+		typedef RBtree<value_type, key_compare, allocator_type> 				tree;
 		typedef ft::Node<value_type>											Node;
 		typedef Node*															node_ptr;
-		typedef RBTree<const value_type, key_compare, allocator_type>			const_tree;
+		typedef RBtree<const value_type, key_compare, allocator_type>			const_tree;
 		
 	public:
 		typedef typename tree::value_compare								value_compare;
@@ -42,11 +43,11 @@ namespace ft
 		typedef ft::reverse_iterator<iterator> 						reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> 				const_reverse_iterator;
 
-    explicit map(const Compare& comp = key_compare(), const Allocator& alloc = Allocator()): _tree(comp, alloc){
+    explicit map(const Compare& comp = key_compare(), const allocator_type &alloc = allocator_type()): _tree(comp, alloc){
     }
 
     template<class InputIterator>
-    map(InputIterator first, InputIterator last, const compare& comp = key_compare(), const Allocator& alloc = Allocator()): _tree(comp, alloc){
+    map(InputIterator first, InputIterator last, const Compare& comp = key_compare(), const allocator_type &alloc = allocator_type()): _tree(comp, alloc){
         this->insert(first, last);
     }
 
@@ -111,14 +112,14 @@ namespace ft
     }
 
     ft::pair<iterator, bool> insert(const value_type& val){
-       ft::pair<node_ptr, bool>tmp = this->tree.insert_single_element(val);
-       ft::pair<iterator, bool>res(iterator(tmp.first, this->_tree.getRoot(), tmp.second)); 
+       ft::pair<node_ptr, bool>tmp = this->_tree.insert_single_elem(val);
+       ft::pair<iterator, bool>res(iterator(tmp.first, this->_tree.getRoot()), tmp.second); 
     }
 
     iterator insert(iterator hint, const value_type& value){
         (void)hint;
         node_ptr tmp = this->_tree.searchTree(value);
-        if (!node_ptr.is_tnull())
+        if (!tmp->is_tnull())
             return(iterator(tmp, this->_tree.getRoot()));
         return (this->insert(value).first);
     }
@@ -201,12 +202,12 @@ namespace ft
         return (allocator_type(this->_tree.get_allocator()));
     }
 
-    RBTree<value_type, Compare, Alloc>	&getTree(){
+    RBtree<value_type, Compare, Alloc>	&getTree(){
          return _tree;
     }
 
     private:
-		RBTree<value_type, Compare, Alloc>	_tree;
+		RBtree<value_type, Compare, Alloc>	_tree;
     };
 
     	template <class Key, class T, class Compare, class Alloc>
