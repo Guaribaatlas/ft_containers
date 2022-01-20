@@ -37,8 +37,8 @@ namespace ft
 	public:
 		typedef typename tree::value_compare								value_compare;
 
-		typedef TreeIterator<bidirectional_iterator_tag, tree> 				iterator;
-		typedef TreeIterator<bidirectional_iterator_tag, const_tree, tree>	const_iterator;
+		typedef TreeIterator<std::bidirectional_iterator_tag, tree> 				iterator;
+		typedef TreeIterator<std::bidirectional_iterator_tag, const_tree, tree>	const_iterator;
 
 		typedef ft::reverse_iterator<iterator> 						reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> 				const_reverse_iterator;

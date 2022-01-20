@@ -8,6 +8,21 @@
         "map": "cpp",
         "string": "cpp",
         "string_view": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "stdexcept": "cpp",
+        "__functional_03": "cpp",
+        "__hash_table": "cpp",
+        "__locale": "cpp",
+        "__split_buffer": "cpp",
+        "__tree": "cpp",
+        "memory_resource": "cpp",
+        "functional": "cpp",
+        "list": "cpp",
+        "locale": "cpp",
+        "memory": "cpp",
+        "set": "cpp",
+        "unordered_map": "cpp"
     }
 }

@@ -340,9 +340,9 @@ namespace ft
 
 			if (this->_comp(key.first, node->data.first))
 			{
-				return searchTreeHelper(node->left, key);
+				return searchTreeHelper(node->left_child, key);
 			}
-			return searchTreeHelper(node->right, key);
+			return searchTreeHelper(node->right_child, key);
 		}
 
         void fixDelete(node_ptr x)

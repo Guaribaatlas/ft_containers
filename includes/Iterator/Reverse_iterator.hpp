@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 23:15:27 by jehaenec          #+#    #+#             */
-/*   Updated: 2021/11/25 23:29:21 by jehaenec         ###   ########.fr       */
+/*   Updated: 2022/01/20 18:09:38 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,24 @@
 
 namespace ft
 {
-    template <typename T, class not_const_T =T>
-    class reverse_iterator : public iterator<random_access_iterator_tag, T>
+    template <class Iter>
+    class reverse_iterator
     {
-        public:
-            typedef typename iterator<random_access_iterator_tag, T>::iterator_category     iterator_category;
-            typedef typename iterator<random_access_iterator_tag, T>::pointer               pointer;
-            typedef typename iterator<random_access_iterator_tag, T>::reference             reference;
-            typedef typename iterator<random_access_iterator_tag, T>::value_type            value_type;
-            typedef typename iterator<random_access_iterator_tag, T>::difference_type       difference_type;
+        		public:
+
+		typedef				Iter											iterator_type;
+		typedef	typename	ft::iterator_traits<Iter>::iterator_category	iterator_category;
+		typedef	typename	ft::iterator_traits<Iter>::value_type			value_type;
+		typedef	typename	ft::iterator_traits<Iter>::difference_type		difference_type;
+		typedef	typename	ft::iterator_traits<Iter>::pointer				pointer;
+		typedef	typename	ft::iterator_traits<Iter>::reference			reference;
         //
         //CONSTRUCTOR + DESTRUCTOR + ASSIGNATION OVERLOAD
         //
         reverse_iterator():_ptr(nullptr){
         }
         
-        reverse_iterator(const reverse_iterator<not_const_T> &origin):_ptr(origin->getPtr()){
+        reverse_iterator(const reverse_iterator<Iter> &origin):_ptr(origin->getPtr()){
         }
         
         reverse_iterator(pointer pointer): _ptr(pointer){
@@ -40,7 +42,7 @@ namespace ft
         
         virtual ~reverse_iterator(){}
         
-        reverse_iterator & operator=(const reverse_iterator<not_const_T> &origin){
+        reverse_iterator & operator=(const reverse_iterator<Iter> &origin){
             this->_ptr = origin.getPtr();
             return (*this);
         }
@@ -67,7 +69,7 @@ namespace ft
             return (--(*this->_ptr));
         }
         reference operator[](int i){
-            return(this->ptr[i]);
+            return(*(*this + i));
         }
         //
         //INCREMENT + DECREMENT
@@ -114,11 +116,11 @@ namespace ft
         }
     template <class Iterator1, class Iterator2>
     bool operator<(const reverse_iterator<Iterator1> &a, const reverse_iterator<Iterator2> &b){
-            return (a.base() < b.base());
+            return (a.base() > b.base());
         }
     template <class Iterator1, class Iterator2>
     bool operator>(const reverse_iterator<Iterator1> &a, const reverse_iterator<Iterator2> &b){
-            return (a.base() > b.base());
+            return (a.base() < b.base());
         }
         //
         // ADDITION + SOUSTRACTION OVERLOAD
@@ -126,11 +128,11 @@ namespace ft
 
     template <class Iterator>
     reverse_iterator<Iterator> operator+(const reverse_iterator<Iterator> &a, typename reverse_iterator<Iterator>::difference_type b){
-            return (reverse_iterator<Iterator>(a.base() + b));
+            return (reverse_iterator<Iterator>(a.base() - b));
         }
     template <class Iterator1, class Iterator2>
     typename reverse_iterator<Iterator1>::difference_type operator-(const reverse_iterator<Iterator1> &a, const reverse_iterator<Iterator2> &b){
-            return (a.base() - b.base());
+            return (a.base() + b.base());
             
         }
 }
