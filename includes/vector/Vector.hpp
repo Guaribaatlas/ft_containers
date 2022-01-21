@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 20:43:10 by jehaenec          #+#    #+#             */
-/*   Updated: 2022/01/20 19:05:12 by jehaenec         ###   ########.fr       */
+/*   Updated: 2022/01/21 15:39:42 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ namespace ft
 
             explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()):_alloc(alloc), _size(0), _capacity(n) 
             {
-                _array = _alloc.allocate(_capacity);
-                for (size_type i = 0; i < _size; i++){
+                _array = _alloc.allocate(n);
+                for (size_type i = 0; i < n; i++){
                     _alloc.construct(&_array[i], val);
                     _size++;
                 }
@@ -69,24 +69,26 @@ namespace ft
 			    }
 		    }
             vector(const vector& x): _alloc(x._alloc), _size(x._size), _capacity(x._capacity){
-                _array = _alloc.allocate(x._size);
-                for (size_t i = 0; i < x._size; i++){
+                _array = _alloc.allocate(x._capacity);
+                for (size_t i = 0; i < x.size(); i++){
                     _alloc.construct(&(this->_array[i]), x[i]);
                 }
             }
             
-            ~vector(){   
+            ~vector(){
+                this->clear();
+			    _alloc.deallocate(_array, this->capacity());  
             }
             
-            vector& operator=(const vector& x)
-            {
-                this->_capacity = x._capacity;
-                this->size = x._size;
-                this->_alloc = x._alloc;
-                this->_array = _alloc.allocate(_capacity);
-                for(size_t i; i < _size; i++){
-                    this->_array[i] = _alloc.construct(this->_array[i], x._array[i]);
-                }
+            vector& operator=(const vector& x){
+				    this->clear();
+				    this->_alloc.deallocate(this->_array, this->capacity());
+				    this->_array = this->_alloc.allocate(x.capacity());
+				    this->_size = x.size();
+				    this->_capacity = x.capacity();
+				    for (size_type i = 0; i < x.size(); i++)
+					    this->_alloc.construct(&(this->_array[i]), x[i]);
+			        return (*this);
             }
             
             iterator            begin(){
@@ -189,7 +191,7 @@ namespace ft
             const_reference front()const{
                 return (_array[0]);
             }
-            
+                
             reference       back(){
                 return (_array[_size]);    
             }
@@ -200,39 +202,47 @@ namespace ft
              
 	        template <class InputIterator>
 		    void assign(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0){
-                size_typ new_size = last - first;
+                size_type new_size = last - first;
                 if (new_size > this->_alloc.max_size())
                     throw std::length_error("size requested is greater than max size (vector max_size)\n");
                 for (size_t i = 0; i < _size; i++)
                     _alloc.destroy(&_array[i]);
-                if (new_size < _capacity)
+                if (new_size > _capacity)
                 {
                     _alloc.deallocate(_array, _capacity);
                     _capacity = new_size;
                     _array = _alloc.allocate(_capacity);
                 }
-                int i = 0;
+                size_t i = 0;
                 for (InputIterator it = first; it != last ; it++)
                     _alloc.construct(&_array[i++], *it);
                 _size = new_size;                
             }
             
-	        void assign(size_type n, const value_type& u){
+	        void assign(size_type n, const value_type &u){
                 if (n > this->_alloc.max_size())
                     throw std::length_error("size requested is greater than max size (vector max_size)\n");
                 for (size_t i = 0; i < _size; i++)
                     _alloc.destroy(&_array[i]);
-                if (n < _capacity)
+                if (n > _capacity)
                 {
                     _alloc.deallocate(_array, _capacity);
                     _capacity = n;
                     _array = _alloc.allocate(_capacity);
                 }
-                for (size_type i = 0; i < n; i++)
+                for (size_t i = 0; i < n; i++)
                     _alloc.construct(&_array[i++], u);
                 _size = n;            
             }
             
+            void pop_back(){
+			    if (_size > 0)
+			    {
+				    _alloc.destroy(&_array[_size - 1]);
+				    _size--;
+			    }
+		    }
+
 	        void push_back(const value_type& x){
                 if (this->_size + 1 > _capacity)
                 {
@@ -241,20 +251,21 @@ namespace ft
                     else
                         _reallocateVec(_capacity * 2); 
                 }
-                _alloc.construct(_array[_size++], x);
+                _alloc.construct(&_array[_size++], x);
             }    
-	        void pop_back(){
-                if (_size > 0)
-                    _alloc.detroy(&_array[_size - 1]);
-                _size--;
-            }
+            
+            void clear()
+		    {
+			    while (_size > 0)
+				    pop_back();
+		    }
             
             void insert (iterator position, size_type n, const value_type& val)
 	        {
                 while (n--)
                     position = insert(position, val) + 1;
             }
-	   
+    
 		    iterator insert(const_iterator position, const value_type& x)
             {
                 size_t i = -1;
@@ -275,7 +286,7 @@ namespace ft
             }
         
             template <class InputIterator>
-	        iterator insert(iterator position, InputIterator first, InputIterator last){
+	        void insert(iterator position, InputIterator first, InputIterator last){
                 ft::vector<value_type> tmp(first, last);
                 for (iterator it = tmp.begin(); it != tmp.end(); it++){
                     position = insert(position, *it) + 1;
@@ -335,7 +346,45 @@ namespace ft
 			    this->_size = size;
 			    this->_capacity = newCapacity;
             }
-        
     };    
+    	template <class T, class Alloc>
+	bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return (false);
+		size_t i = 0;
+		while (i < lhs.size())
+		{
+			if (lhs[i] != rhs[i])
+				return (false);
+			i++;
+		}
+		return (true);
+	}
+
+	template <class T, class Alloc>
+	bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+		return(!(lhs==rhs));
+	}
+
+	template <class T, class Alloc>
+	bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+		return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	}
+    
+	template <class T, class Alloc>
+	bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+		return ((lhs == rhs) || (lhs < rhs));
+	}
+    
+	template <class T, class Alloc>
+	bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+		return (!(lhs == rhs) && !(lhs < rhs));
+	}
+
+	template <class T, class Alloc>
+	bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+		return (!(lhs < rhs));
+	}
 }
 #endif

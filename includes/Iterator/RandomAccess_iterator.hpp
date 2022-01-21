@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:29:16 by jehaenec          #+#    #+#             */
-/*   Updated: 2022/01/20 15:38:32 by jehaenec         ###   ########.fr       */
+/*   Updated: 2022/01/21 15:36:51 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,30 @@ namespace ft
         //
         random_access_iterator():_ptr(nullptr){
         }
-        
-        random_access_iterator(const random_access_iterator<T> &origin):_ptr(origin.base()){
+        template<class U>
+        random_access_iterator(const random_access_iterator<U> &origin):_ptr(origin.base()){
         }
         
+        template<class U>
+        random_access_iterator(U* u):_ptr(u){
+        }
+
         random_access_iterator(pointer pointer): _ptr(pointer){
         }
         
         virtual ~random_access_iterator(){}
         
-        random_access_iterator & operator=(const random_access_iterator<T> &origin){
-            this->_ptr = origin.getPtr();
+        template<class U>
+        random_access_iterator & operator=(const random_access_iterator<U> &origin){
+            this->_ptr = origin.base();
             return (*this);
         }
+        
         random_access_iterator & operator-=(difference_type n){
             this->_ptr -= n;
             return (*this);
         }
+        
         random_access_iterator & operator+=(difference_type n){
             this->_ptr += n;
             return (*this);
@@ -66,7 +73,7 @@ namespace ft
         }
         
         reference operator[](int i){
-            return(this->ptr[i]);
+            return(this->_ptr[i]);
         }
         //
         //INCREMENT + DECREMENT
@@ -86,10 +93,13 @@ namespace ft
         }
         random_access_iterator operator--(int){
             random_access_iterator tmp = *this;
-            this->ptr--;
+            this->_ptr--;
             return (tmp);
-        }
-        
+        } 
+                
+       random_access_iterator operator-(difference_type b){
+            return (this->base() - b);   
+        }          
         private:
             pointer _ptr;   
     };
@@ -110,10 +120,12 @@ namespace ft
     bool operator<=(const random_access_iterator<Iterator1> &a, const random_access_iterator<Iterator2> &b){
             return (a.base() <= b.base());
         }
+        
     template <class Iterator1, class Iterator2>
     bool operator<(const random_access_iterator<Iterator1> &a, const random_access_iterator<Iterator2> &b){
             return (a.base() < b.base());
         }
+
     template <class Iterator1, class Iterator2>
     bool operator>(const random_access_iterator<Iterator1> &a, const random_access_iterator<Iterator2> &b){
             return (a.base() > b.base());
@@ -125,10 +137,15 @@ namespace ft
     random_access_iterator<Iterator> operator+(const random_access_iterator<Iterator> &a, typename random_access_iterator<Iterator>::difference_type b){
             return (random_access_iterator<Iterator>(a.base() + b));
         }
+
+    template <class Iterator>
+    random_access_iterator<Iterator> operator+( typename random_access_iterator<Iterator>::difference_type b, const random_access_iterator<Iterator> &a){
+            return (random_access_iterator<Iterator>(a.base() + b));
+        }
+        
     template <class Iterator1, class Iterator2>
     typename random_access_iterator<Iterator1>::difference_type operator-(const random_access_iterator<Iterator1> &a, const random_access_iterator<Iterator2> &b){
-            return (a.base() - b.base());
-            
+            return (a.base() - b.base());    
         }
 }
 
