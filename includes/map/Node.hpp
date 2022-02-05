@@ -21,7 +21,7 @@ namespace ft
 			Node *where = this;
 			if (where->is_null())
 				return (nullptr);
-			while (!(where->left_child->is_null()))
+			while (where->left_child && !(where->left_child->is_null()))
 				where = where->left_child;
 			return (where);
 		}
@@ -30,7 +30,7 @@ namespace ft
 			Node *where = this;
 			if (where->is_null())
 				return (nullptr);
-			while (!(where->right_child->is_null()))
+			while (where->right_child && !(where->right_child->is_null()))
 				where = where->right_child;
 			return (where);			
 		}

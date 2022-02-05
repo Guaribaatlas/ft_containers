@@ -30,7 +30,7 @@ namespace ft
         }
 
         bool operator==(const ft::pair<T1, T2> &cmp) const{
-            return(cmp.first == this->first && cmp.second == this->second);
+            return(this->first == cmp.first && this->second == cmp.second);
         }
 
         bool operator!=(const ft::pair<T1, T2> &cmp) const{

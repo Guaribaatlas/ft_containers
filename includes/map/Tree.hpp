@@ -15,7 +15,9 @@ namespace ft
             typedef ft::Node<value_type> Node;
             typedef size_t  size_type;
             typedef Alloc   allocator_type;
-            
+
+            typedef typename allocator_type::difference_type difference_type;
+			typedef typename std::bidirectional_iterator_tag iterator_category;
             typedef typename T::first_type key_type;
             typedef typename T::second_type mapped_type;
             typedef typename T::second_type pair;
@@ -82,6 +84,7 @@ namespace ft
                 this->_comp = origin._comp;
                 this->_root = _tnull;
                 this->_root = this->copy_tree(nullptr, this->_root, origin._root);
+				return (*this);
             }
 
             node_ptr copy_tree(node_ptr parent, node_ptr node, const node_ptr ref){
@@ -127,7 +130,7 @@ namespace ft
             }
 
             node_ptr begin_node() const{
-                if (this->_root && !(this->root == this->_tnull))
+                if (this->_root && !(this->_root == this->_tnull))
                     return (this->minimum(this->_root));
                 return (this->_tnull);          
             }
@@ -647,7 +650,7 @@ namespace ft
 			return (value_compare(this->_comp));
 		}
 
-		node_ptr lower_bound (const key_type& k)
+		node_ptr lower_bound (const key_type& k) const
 		{
 			node_ptr cursor = this->_root;
 			node_ptr res = this->_tnull;
@@ -664,7 +667,7 @@ namespace ft
 			return (res);
 		}
 
-		node_ptr upper_bound (const key_type& k)
+		node_ptr upper_bound (const key_type& k) const
 		{
 			node_ptr cursor = this->_root;
 			node_ptr res = this->_tnull;

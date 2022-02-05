@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 14:16:53 by jehaenec          #+#    #+#             */
-/*   Updated: 2021/12/29 17:11:30 by jehaenec         ###   ########.fr       */
+/*   Updated: 2022/02/05 18:13:15 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ namespace ft
             this->_root = root;
         }
 
-        TreeIterator(const TreeIterator & origin){
+        TreeIterator(const TreeIterator<T, not_const_tree> & origin){
             this->_node_ptr = origin.getNode();
             this->_root = origin.getRoot();
         }
@@ -65,29 +65,38 @@ namespace ft
         reference operator*(){
             return (this->_node_ptr->data);
         }
+
+        reference operator*()const{
+            return (this->_node_ptr->data);
+        }
+
         pointer operator->(){
-            return (&this->node_ptr->data);
+            return (&this->_node_ptr->data);
+        }
+        
+        pointer operator->() const{
+            return (&this->_node_ptr->data);
         }
         
         TreeIterator& operator++(){
             this->_node_ptr = forward(this->_node_ptr);
-            return (this->_node_ptr);
+            return (*this);
         }
         
         TreeIterator operator++(int){
-            Node tmp_node = this->_node_ptr;
-            forward(this->_node_ptr);
+            TreeIterator tmp_node(*this);
+            this->_node_ptr = forward(this->_node_ptr);
             return (tmp_node);
         }
 
         TreeIterator& operator--(){
             this->_node_ptr = backward(this->_node_ptr);
-            return (this->_node_ptr);
+            return (*this);
         }
         
         TreeIterator operator--(int){
-            Node tmp_node = this->_node_ptr;
-            backward(this->_node_ptr);
+            TreeIterator tmp_node(*this);
+            this->_node_ptr = backward(this->_node_ptr);
             return (tmp_node);
         }
 
@@ -124,13 +133,13 @@ namespace ft
         }
         
         Node * forward(Node * cursor){
-            if (cursor && cursor->right_child && !(cursor->right_child.is_tnull()))
-                return (cursor->right_child.down_left());
+            if (cursor && cursor->right_child && !cursor->right_child->is_null())
+                return (cursor->right_child->down_left());
             else
             {
                 Node *ref_to_tnull = cursor->right_child;
                 Node *p = cursor->parent;
-                while (p && !p->is_tnull() && cursor == p->right_child)
+                while (p && !p->is_null() && cursor == p->right_child)
                 {
                     cursor = p;
                     p = p->parent;
@@ -143,19 +152,19 @@ namespace ft
         }
 
         Node * backward(Node * cursor){
-            if (cursor->is_tnull())
+            if (cursor->is_null())
             {
-                if (!(this->_root->is_tnull()))
+                if (!(this->_root->is_null()))
                     return (this->_root->down_right());
                 return (cursor);
             }
-            if (cursor && cursor->left_child && !(cursor->left_child.is_tnull()))
+            if (cursor && cursor->left_child && !(cursor->left_child->is_null()))
                 return (cursor->left_child->down_right());
             else
             {
                 Node *ref_to_tnull = cursor->left_child;
                 Node *p = cursor->parent;
-                while (p && !p->is_tnull() && cursor == p->left_child)
+                while (p && !p->is_null() && cursor == p->left_child)
                 {
                     cursor = p;
                     p = p->parent;

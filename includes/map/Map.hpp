@@ -16,6 +16,7 @@ namespace ft
     template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T> > >
 	class map
 	{
+    public:
         typedef Key 											key_type;
 		typedef T 												mapped_type;
 		typedef ft::pair<const Key, T> 							value_type;
@@ -30,7 +31,7 @@ namespace ft
 		
 	private:
 		typedef RBtree<value_type, key_compare, allocator_type> 				tree;
-		typedef ft::Node<value_type>											Node;
+		typedef typename tree::Node          									Node;
 		typedef Node*															node_ptr;
 		typedef RBtree<const value_type, key_compare, allocator_type>			const_tree;
 		
@@ -56,7 +57,8 @@ namespace ft
     }
 
     map& operator=(const map& origin){
-        this->_tree = origin._tree;
+        if (*this != origin)
+            _tree = origin._tree;
         return (*this);
     }
 
@@ -80,19 +82,19 @@ namespace ft
     }
 
     reverse_iterator rbegin(){
-        return(reverse_iterator(this->_tree.begin_node(), this->_tree.getRoot()));
+        return(reverse_iterator(this->end()));
     }
 
     const_reverse_iterator rbegin()const{
-        return(const_reverse_iterator(this->_tree.begin_node(), this->_tree.getRoot()));
+        return(const_reverse_iterator(this->end()));
     }
 
     reverse_iterator rend(){
-        return(reverse_iterator(this->_tree.end_node(), this->_tree.getRoot()));
+        return(reverse_iterator(this->begin()));
     }
 
     const_reverse_iterator rend()const{
-        return(const_reverse_iterator(this->_tree.end_node(), this->_tree.getRoot()));
+        return(const_reverse_iterator(this->begin()));
     }
 
     bool empty() const {
@@ -113,13 +115,14 @@ namespace ft
 
     ft::pair<iterator, bool> insert(const value_type& val){
        ft::pair<node_ptr, bool>tmp = this->_tree.insert_single_elem(val);
-       ft::pair<iterator, bool>res(iterator(tmp.first, this->_tree.getRoot()), tmp.second); 
+       ft::pair<iterator, bool>res(iterator(tmp.first, this->_tree.getRoot()), tmp.second);
+       return (res);
     }
 
     iterator insert(iterator hint, const value_type& value){
         (void)hint;
         node_ptr tmp = this->_tree.searchTree(value);
-        if (!tmp->is_tnull())
+        if (!tmp->is_null())
             return(iterator(tmp, this->_tree.getRoot()));
         return (this->insert(value).first);
     }
@@ -148,7 +151,7 @@ namespace ft
         while (first != last){
             tmp = first;
             ++first;
-            this->_tree.erase(tmp);
+            this->erase(tmp);
         }
     }
 
@@ -170,16 +173,30 @@ namespace ft
 
     iterator find (const key_type& k){
 		node_ptr node = this->_tree.searchTreeKey(k);
-		if (node->is_tnull())
+		if (node->is_null())
 			return (this->end());
 		return (iterator(node, this->_tree.getRoot()));
 	}
 
     const_iterator find (const key_type& k) const{
 		node_ptr node = this->_tree.searchTreeKey(k);
-		if (node->is_tnull())
+		if (node->is_null())
 			return (this->end());
 		return (const_iterator(node, this->_tree.getRoot()));
+	}
+
+    size_type count (const key_type& k) const
+	{
+			node_ptr node = this->_tree.searchTreeKey(k);
+			return ( node->is_null() ? 0 : 1 );
+	}
+
+    iterator lower_bound (const key_type& k){
+		return (iterator(this->_tree.lower_bound(k), this->_tree.getRoot() ));
+	}
+
+	const_iterator lower_bound (const key_type& k) const{
+			return (const_iterator(this->_tree.lower_bound(k), this->_tree.getRoot()));
 	}
 
     iterator upper_bound (const key_type& k){
@@ -193,7 +210,7 @@ namespace ft
     pair<iterator,iterator>	equal_range (const key_type& k){
 		return (pair<iterator, iterator>(this->lower_bound(k), this->upper_bound(k)));
 	}
-		
+    
 	pair<const_iterator, const_iterator>	equal_range (const key_type& k) const{
 		return (pair<const_iterator, const_iterator>(this->lower_bound(k), this->upper_bound(k)));
 	}

@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 23:15:27 by jehaenec          #+#    #+#             */
-/*   Updated: 2022/02/05 11:02:10 by jehaenec         ###   ########.fr       */
+/*   Updated: 2022/02/05 19:53:08 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ namespace ft
         //
         //CONSTRUCTOR + DESTRUCTOR + ASSIGNATION OVERLOAD
         //
-        reverse_iterator():_ptr(nullptr){
+        reverse_iterator():_ptr(){
         }
         
         explicit reverse_iterator(iterator_type x){
@@ -75,7 +75,7 @@ namespace ft
 		}
 
         
-        pointer operator->(){
+        pointer operator->()const{
             return (&(operator*()));
         } 
 
