@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:29:16 by jehaenec          #+#    #+#             */
-/*   Updated: 2022/01/21 15:36:51 by jehaenec         ###   ########.fr       */
+/*   Updated: 2022/02/05 10:23:28 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ namespace ft
         //
         random_access_iterator():_ptr(nullptr){
         }
+        
         template<class U>
         random_access_iterator(const random_access_iterator<U> &origin):_ptr(origin.base()){
         }
-        
+              
         template<class U>
         random_access_iterator(U* u):_ptr(u){
         }

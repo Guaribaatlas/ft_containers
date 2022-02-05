@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 23:15:27 by jehaenec          #+#    #+#             */
-/*   Updated: 2022/01/20 18:09:38 by jehaenec         ###   ########.fr       */
+/*   Updated: 2022/02/05 11:02:10 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 namespace ft
 {
-    template <class Iter>
+    template <typename Iter>
     class reverse_iterator
     {
         		public:
@@ -34,7 +34,12 @@ namespace ft
         reverse_iterator():_ptr(nullptr){
         }
         
-        reverse_iterator(const reverse_iterator<Iter> &origin):_ptr(origin->getPtr()){
+        explicit reverse_iterator(iterator_type x){
+            this->_ptr = x;
+        }
+    
+        template<class U>
+        reverse_iterator(const reverse_iterator<U> &origin):_ptr(origin.base()){
         }
         
         reverse_iterator(pointer pointer): _ptr(pointer){
@@ -42,8 +47,12 @@ namespace ft
         
         virtual ~reverse_iterator(){}
         
+        iterator_type base() const {
+			return this->_ptr;
+        }
+        
         reverse_iterator & operator=(const reverse_iterator<Iter> &origin){
-            this->_ptr = origin.getPtr();
+            this->_ptr = origin.base();
             return (*this);
         }
         
@@ -57,17 +66,23 @@ namespace ft
             return (*this);
         }
         
-        pointer base() const{
-            return (this->_ptr);
-        }
+        reverse_iterator operator-(difference_type n)const{
+			return (reverse_iterator(this->base() + n));
+		}
+
+        reverse_iterator operator+(difference_type n)const{
+			return (reverse_iterator(this->base() - n));
+		}
+
         
         pointer operator->(){
-            return (this->_ptr);
+            return (&(operator*()));
         } 
 
-        reference operator*(){
-            return (--(*this->_ptr));
-        }
+        reference operator*()const{
+			iterator_type tmp = this->_ptr;
+			return *(--tmp);
+		}
         reference operator[](int i){
             return(*(*this + i));
         }
@@ -75,26 +90,26 @@ namespace ft
         //INCREMENT + DECREMENT
         //
         reverse_iterator& operator++(){
-            this->_ptr--;
+            --_ptr;
             return (*this);
         }
         reverse_iterator operator++(int){
             reverse_iterator tmp = *this;
-            this->ptr--;
+            --_ptr;
             return (tmp);
         }
         reverse_iterator& operator--(){
-            this->_ptr++;
+            ++_ptr;
             return (*this);
         }
         reverse_iterator operator--(int){
             reverse_iterator tmp = *this;
-            this->ptr++;
+            ++_ptr;
             return (tmp);
         }
 
         private:
-            pointer _ptr;   
+            iterator_type _ptr;   
     };
 
     
@@ -127,12 +142,18 @@ namespace ft
         //
 
     template <class Iterator>
-    reverse_iterator<Iterator> operator+(const reverse_iterator<Iterator> &a, typename reverse_iterator<Iterator>::difference_type b){
+    reverse_iterator<Iterator> operator+(typename reverse_iterator<Iterator>::difference_type b, const reverse_iterator<Iterator> &a){
             return (reverse_iterator<Iterator>(a.base() - b));
         }
+        
+    template< class Iterator >
+	typename reverse_iterator<Iterator>::difference_type operator-( const reverse_iterator<Iterator>& a, const reverse_iterator<Iterator>& b){
+		return (b.base() - a.base());
+	}
+    
     template <class Iterator1, class Iterator2>
     typename reverse_iterator<Iterator1>::difference_type operator-(const reverse_iterator<Iterator1> &a, const reverse_iterator<Iterator2> &b){
-            return (a.base() + b.base());
+            return (b.base() - a.base());
             
         }
 }

@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 20:43:10 by jehaenec          #+#    #+#             */
-/*   Updated: 2022/01/21 15:39:42 by jehaenec         ###   ########.fr       */
+/*   Updated: 2022/02/05 12:22:00 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ namespace ft
             template <typename InputIterator>
 		    vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0) : _alloc(alloc), _size(0), _capacity(0)
 		    {
-			    for (InputIterator it = first; it < last; it++)
+			    for (InputIterator it = first; it != last; it++)
 				    this->_size++;
 			    this->_capacity = _size;
 			    this->_array = _alloc.allocate(this->_capacity);
@@ -108,19 +108,19 @@ namespace ft
             }
             
             reverse_iterator    rbegin(){
-                return (reverse_iterator(this->begin()));
-            }
-            
-            const_reverse_iterator rbegin()const{
-                return (const_reverse_iterator(this->begin()));
-            }
-            
-            reverse_iterator       rend(){
                 return (reverse_iterator(this->end()));
             }
             
-            const_reverse_iterator rend()const{
+            const_reverse_iterator rbegin()const{
                 return (const_reverse_iterator(this->end()));
+            }
+            
+            reverse_iterator       rend(){
+                return (reverse_iterator(this->begin()));
+            }
+            
+            const_reverse_iterator rend()const{
+                return (const_reverse_iterator(this->begin()));
             }
 
             size_type	size()const{
@@ -193,16 +193,16 @@ namespace ft
             }
                 
             reference       back(){
-                return (_array[_size]);    
+                return (_array[_size - 1]);    
             }
             
             const_reference back()const{
-                return (_array[_size]);
+                return (_array[_size - 1]);
             }
              
 	        template <class InputIterator>
 		    void assign(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0){
-                size_type new_size = last - first;
+                size_type new_size = std::distance(first, last);
                 if (new_size > this->_alloc.max_size())
                     throw std::length_error("size requested is greater than max size (vector max_size)\n");
                 for (size_t i = 0; i < _size; i++)
@@ -231,7 +231,7 @@ namespace ft
                     _array = _alloc.allocate(_capacity);
                 }
                 for (size_t i = 0; i < n; i++)
-                    _alloc.construct(&_array[i++], u);
+                    _alloc.construct(&_array[i], u);  
                 _size = n;            
             }
             
@@ -268,13 +268,18 @@ namespace ft
     
 		    iterator insert(const_iterator position, const value_type& x)
             {
-                size_t i = -1;
+                size_t i = 0;
                 size_t j = _size;
                 iterator n = begin();
-                while ((n != position) && (++i <_size))
-                    n++;
+                while ((n + i != position) && (i <_size))
+                    i++;
                 if (_capacity < (_size + 1))
-                    reserve(_capacity * 2);
+                {
+                    if (_capacity == 0)
+                        _capacity = 1;
+                    else
+                        reserve(_capacity * 2);
+                }
                 while (j > i)
                 {
                     _array[j] = _array[j-1];
@@ -282,11 +287,11 @@ namespace ft
                 }
                 _array[i] = x;
                 _size++;
-                return (&_array[i]);
+                return (iterator(&_array[i]));
             }
         
             template <class InputIterator>
-	        void insert(iterator position, InputIterator first, InputIterator last){
+	        void insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0){
                 ft::vector<value_type> tmp(first, last);
                 for (iterator it = tmp.begin(); it != tmp.end(); it++){
                     position = insert(position, *it) + 1;

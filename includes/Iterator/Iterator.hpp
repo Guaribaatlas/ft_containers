@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 12:10:53 by jehaenec          #+#    #+#             */
-/*   Updated: 2022/01/20 17:44:20 by jehaenec         ###   ########.fr       */
+/*   Updated: 2022/02/05 10:11:50 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,17 @@ namespace ft
     template< class Iter >
     struct iterator_traits
     {
-            typedef typename Iter::Difference_type      Difference_type;
-            typedef typename Iter::Pointer              pointer;
-            typedef typename Iter::Reference            reference;
-            typedef typename Iter::Category             iterator_category;
+            typedef typename Iter::difference_type      difference_type;
+            typedef typename Iter::pointer              pointer;
+            typedef typename Iter::reference            reference;
+            typedef typename Iter::iterator_category    iterator_category;
             typedef typename Iter::value_type           value_type;
     };  
 
     template< class T >
     struct iterator_traits<T*>
     {
-            typedef std::ptrdiff_t                      Difference_type;
+            typedef std::ptrdiff_t                      difference_type;
             typedef T                                   value_type;
             typedef T*                                  pointer;
             typedef T&                                  reference;
