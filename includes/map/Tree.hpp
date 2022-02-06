@@ -116,17 +116,21 @@ namespace ft
             }
 
             void clear(){
+				
                 this->destroy_tree(this->_root);
                 this->_root = this->_tnull;
             }
 
             void destroy_tree(node_ptr node){
                 if (node && !(node->check))
-                    destroy_tree(node->left_child);
-                if (node && !(node->right_child))
-                    destroy_tree(node->right_child);
-                this->_alloc.destroy(&node->data);
-                this->_node_alloc.deallocate(node, 1);
+				{
+					if (node->left_child && !node->left_child->check)
+                	    destroy_tree(node->left_child);
+                	if (node && !(node->right_child))
+                    	destroy_tree(node->right_child);
+                	this->_alloc.destroy(&node->data);
+                	this->_node_alloc.deallocate(node, 1);
+				}
             }
 
             node_ptr begin_node() const{
