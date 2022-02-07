@@ -56,12 +56,7 @@ namespace ft
     }
 
     map& operator=(const map& origin){
-        std::cout << "bonjour" << std::endl;
-        if (*this != origin)
-        {
-            std::cout << "ici" << std::endl;
-            _tree = origin._tree;
-        }
+        _tree = origin._tree;
         return (*this);
     }
 

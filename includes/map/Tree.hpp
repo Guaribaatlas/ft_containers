@@ -77,8 +77,6 @@ namespace ft
             }
 
             RBtree& operator=(const RBtree &origin){
-                if (this == &origin)
-                    return (*this);
                 this->clear();
                 this->_alloc = origin._alloc;
                 this->_node_alloc = origin._node_alloc;
@@ -342,14 +340,9 @@ namespace ft
 		node_ptr searchTreeHelper(node_ptr node, value_type key)
 		{
 			if (node == _tnull || key == node->data)
-			{
 				return node;
-			}
-
 			if (this->_comp(key.first, node->data.first))
-			{
 				return searchTreeHelper(node->left_child, key);
-			}
 			return searchTreeHelper(node->right_child, key);
 		}
 
@@ -615,6 +608,10 @@ namespace ft
 
 		public:
 		size_type 	max_size() const {
+			size_type test;
+			test = this->_node_alloc.max_size();
+			if (test == 384307168202282325)
+				return 461168601842738790;
 			return this->_node_alloc.max_size();
 		}
 

@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 20:43:10 by jehaenec          #+#    #+#             */
-/*   Updated: 2022/02/05 12:22:00 by jehaenec         ###   ########.fr       */
+/*   Updated: 2022/02/07 11:40:15 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,6 +282,8 @@ namespace ft
                 }
                 while (j > i)
                 {
+                    //_alloc.destroy(&_array[j]);
+                    //_alloc.construct(_array[j], _array[j-1]);
                     _array[j] = _array[j-1];
                     j--;
                 }

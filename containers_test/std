@@ -1,64 +1,60 @@
-	-- PART ONE --
+List contains:
+key: 42 | value: lol
+key: 50 | value: mdr
+key: 35 | value: funny
+key: 45 | value: bunny
+key: 21 | value: fizz
+key: 38 | value: buzz
+key: 55 | value: fuzzy
+	-- [0] --
 size: 7
-max_size: 461168601842738790
+max_size: 288230376151711743
 
 Content is:
-- key: 1 | value: 7
-- key: 2 | value: 14
-- key: 3 | value: 21
-- key: 4 | value: 28
-- key: 5 | value: 35
-- key: 6 | value: 1
-- key: 7 | value: 0
+- key: 21 | value: fizz
+- key: 35 | value: funny
+- key: 38 | value: buzz
+- key: 42 | value: lol
+- key: 45 | value: bunny
+- key: 50 | value: mdr
+- key: 55 | value: fuzzy
 ###############################################
-size: 5
-max_size: 461168601842738790
-
-Content is:
-- key: 1 | value: 6
-- key: 2 | value: 5
-- key: 3 | value: 4
-- key: 4 | value: 3
-- key: 5 | value: 2
-###############################################
+List contains:
+key: 87 | value: hey
+key: 47 | value: eqweqweq
+key: 35 | value: this key is already inside
+key: 23 | value: but not that one
+key: 1 | value: surprising isnt it?
+key: 100 | value: is it enough??
+key: 55 | value: inside map too
+	-- [1] --
 size: 7
-max_size: 461168601842738790
+max_size: 288230376151711743
 
 Content is:
-- key: 1 | value: 5
-- key: 2 | value: 10
-- key: 3 | value: 15
-- key: 4 | value: 20
-- key: 5 | value: 25
-- key: 6 | value: 1
-- key: 7 | value: 0
+- key: 21 | value: fizz
+- key: 35 | value: funny
+- key: 38 | value: buzz
+- key: 42 | value: lol
+- key: 45 | value: bunny
+- key: 50 | value: mdr
+- key: 55 | value: fuzzy
 ###############################################
-	-- PART TWO --
-size: 7
-max_size: 461168601842738790
+	-- [2] --
+size: 12
+max_size: 288230376151711743
 
 Content is:
-- key: 1 | value: 5
-- key: 2 | value: 10
-- key: 3 | value: 15
-- key: 4 | value: 20
-- key: 5 | value: 25
-- key: 6 | value: 1
-- key: 7 | value: 0
+- key: 1 | value: surprising isnt it?
+- key: 21 | value: fizz
+- key: 23 | value: but not that one
+- key: 35 | value: funny
+- key: 38 | value: buzz
+- key: 42 | value: lol
+- key: 45 | value: bunny
+- key: 47 | value: eqweqweq
+- key: 50 | value: mdr
+- key: 55 | value: fuzzy
+- key: 87 | value: hey
+- key: 100 | value: is it enough??
 ###############################################
-size: 0
-max_size: 461168601842738790
-
-Content is:
-###############################################
-size: 5
-max_size: 461168601842738790
-
-Content is:
-- key: 1 | value: 6
-- key: 2 | value: 5
-- key: 3 | value: 4
-- key: 4 | value: 3
-- key: 5 | value: 2
-###############################################
-oui
