@@ -6,7 +6,7 @@
 /*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 20:43:10 by jehaenec          #+#    #+#             */
-/*   Updated: 2022/02/07 11:40:15 by jehaenec         ###   ########.fr       */
+/*   Updated: 2022/02/07 14:35:58 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,12 +174,12 @@ namespace ft
             }
             
             reference       at(size_type n){
-                if (n < 0 || this->_size < n)
+                if (n < 0 || this->_size <= n)
                     throw std::out_of_range("n is out of range");
                 return(_array[n]);
             }
             const_reference at(size_type n) const{
-                if (n < 0 || this->_size < n)
+                if (n < 0 || this->_size <= n)
                     throw std::out_of_range("n is out of range");
                 return(_array[n]);
             }
@@ -269,25 +269,22 @@ namespace ft
 		    iterator insert(const_iterator position, const value_type& x)
             {
                 size_t i = 0;
-                size_t j = _size;
                 iterator n = begin();
                 while ((n + i != position) && (i <_size))
                     i++;
                 if (_capacity < (_size + 1))
                 {
                     if (_capacity == 0)
-                        _capacity = 1;
+                        reserve(1);
                     else
                         reserve(_capacity * 2);
                 }
-                while (j > i)
+                for (size_type j = _size; j > i; --j)
                 {
-                    //_alloc.destroy(&_array[j]);
-                    //_alloc.construct(_array[j], _array[j-1]);
-                    _array[j] = _array[j-1];
-                    j--;
+                    _alloc.construct(_array + j, *(_array + j - 1));
+                    _alloc.destroy(_array + j);
                 }
-                _array[i] = x;
+                _alloc.construct(_array + i, x);
                 _size++;
                 return (iterator(&_array[i]));
             }
