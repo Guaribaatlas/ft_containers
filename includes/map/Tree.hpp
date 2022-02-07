@@ -125,7 +125,7 @@ namespace ft
 				{
 					if (node->left_child && !node->left_child->check)
                 	    destroy_tree(node->left_child);
-                	if (node && !(node->right_child))
+                	if (node->right_child && !(node->right_child))
                     	destroy_tree(node->right_child);
                 	this->_alloc.destroy(&node->data);
                 	this->_node_alloc.deallocate(node, 1);
