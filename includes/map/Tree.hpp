@@ -53,6 +53,7 @@ namespace ft
             };
         public:
             RBtree(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):_alloc(alloc), _comp(comp){
+				
                 _tnull = _node_alloc.allocate(1);
                 _tnull->check = 1;
                 _tnull->color = 0;

@@ -31,7 +31,7 @@ namespace ft
 		
 	private:
 		typedef RBtree<value_type, key_compare, allocator_type> 				tree;
-		typedef typename tree::Node          									Node;
+		typedef ft::Node<value_type>          									Node;
 		typedef Node*															node_ptr;
 		typedef RBtree<const value_type, key_compare, allocator_type>			const_tree;
 		
@@ -44,21 +44,24 @@ namespace ft
 		typedef ft::reverse_iterator<iterator> 						reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> 				const_reverse_iterator;
 
-    explicit map(const Compare& comp = key_compare(), const allocator_type &alloc = allocator_type()): _tree(comp, alloc){
+    explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()): _tree(comp, alloc){
     }
 
     template<class InputIterator>
-    map(InputIterator first, InputIterator last, const Compare& comp = key_compare(), const allocator_type &alloc = allocator_type()): _tree(comp, alloc){
+    map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()): _tree(comp, alloc){
         this->insert(first, last);
     }
 
-    map(const map& origin){
-        this->_tree = origin._tree;
+    map(const map& origin): _tree(origin._tree){
     }
 
     map& operator=(const map& origin){
+        std::cout << "bonjour" << std::endl;
         if (*this != origin)
+        {
+            std::cout << "ici" << std::endl;
             _tree = origin._tree;
+        }
         return (*this);
     }
 
