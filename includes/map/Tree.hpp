@@ -339,7 +339,7 @@ namespace ft
 
 		node_ptr searchTreeHelper(node_ptr node, value_type key)
 		{
-			if (node == _tnull || key == node->data)
+			if (node == _tnull || (!this->_comp(key.first, node->data.first) && !this->_comp(node->data.first, key.first)))
 				return node;
 			if (this->_comp(key.first, node->data.first))
 				return searchTreeHelper(node->left_child, key);

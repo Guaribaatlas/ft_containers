@@ -33,10 +33,10 @@ void	ft_insert(MAP &mp, U param, V param2)
 int		main(void)
 {
 	TESTED_NAMESPACE::map<T1, T2> mp, mp2;
-
+	std::cout <<"========================" << std::endl;
 	ft_insert(mp, T3(42, "lol"));
 	ft_insert(mp, T3(42, "mdr"));
-
+	std::cout <<"++++++++++++++++++++++++" << std::endl;
 	ft_insert(mp, T3(50, "mdr"));
 	ft_insert(mp, T3(35, "funny"));
 
