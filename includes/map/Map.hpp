@@ -53,7 +53,6 @@ namespace ft
     }
 
     map(const map& origin): _tree(origin._tree){
-        std::cout << "oui" << std::endl;
     }
 
     map& operator=(const map& origin){
