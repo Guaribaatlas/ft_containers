@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   operator.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
+/*   By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/19 19:50:55 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/12/20 16:03:35 by vneirinc         ###   ########.fr       */
+/*   Updated: 2022/02/08 11:14:56 by jehaenec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,24 @@ namespace n_map_set
 template <class Cont>
 static void	comp_op(void)
 {
+	{
 	std::cout << std::endl << std::setw(18) << "compare operator:" << std::endl;
 	Cont	c;
 	Cont	c2;
 
-	all_compare(c, c2, true);
+	//all_compare(c, c2, true);
 
 	ms_insert(c, 12);
 	ms_insert(c, 68);
-	ms_insert(c2, 86);
-	all_compare(c, c2, true);
-
-	c.swap(c2);
+	//ms_insert(c2, 86);
+	//all_compare(c, c2, true);
+	}
+	system("leaks ft_test");
+	/*c.swap(c2);
 	all_compare(c, c2, true);
 
 	c2.erase(c2.begin());
-	all_compare(c, c2, true);
+	all_compare(c, c2, true);*/
 }
 
 template <class Cont>

@@ -30,7 +30,7 @@ int		main(void)
 	printSize(mp);
 	//printSize(mp_range);
 	//std::cout << "+++++++ still up +++++++" << std::endl;
-	//printSize(mp_copy);
+	printSize(mp_copy);
 	mp = mp_copy;
 	mp_copy = mp_range;
 	mp_range.clear();

@@ -30,9 +30,10 @@ namespace ft
 
 		    typedef Node*						node_ptr;
 		    typedef const Node*					const_node_ptr;
+			typedef typename allocator_type::template rebind<Node>::other node_allocator;
 
         private:
-            typename allocator_type::template rebind<Node>::other	_node_alloc;
+            node_allocator											_node_alloc;
 		    allocator_type											_alloc;
 		    node_ptr												_root;
 		    node_ptr												_tnull;
@@ -52,7 +53,7 @@ namespace ft
                     }
             };
         public:
-            RBtree(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):_alloc(alloc), _comp(comp){
+            RBtree(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):_node_alloc(node_allocator(alloc)), _alloc(alloc), _comp(comp){
 				
                 _tnull = _node_alloc.allocate(1);
                 _tnull->check = 1;
@@ -66,14 +67,13 @@ namespace ft
                 this->_alloc = origin._alloc;
                 this->_comp = origin._comp;
                 this->_node_alloc = origin._node_alloc;
-
-                _tnull = _node_alloc.allocate(1);
+				_tnull = _node_alloc.allocate(1);
                 _tnull->check = 1;
                 _tnull->color = 0;
                 _tnull->left_child = nullptr;
                 _tnull->right_child = nullptr;
                 this->_root = _tnull;
-                this->_root = this->copy_tree(nullptr, this->_root, origin._root);
+                this->_root = this->copy_tree(nullptr, this->_root, origin._root, origin._tnull);
             }
 
             RBtree& operator=(const RBtree &origin){
@@ -82,30 +82,39 @@ namespace ft
                 this->_node_alloc = origin._node_alloc;
                 this->_comp = origin._comp;
                 this->_root = _tnull;
-                this->_root = this->copy_tree(nullptr, this->_root, origin._root);
+                this->_root = this->copy_tree(nullptr, this->_root, origin._root, origin._tnull);
 				return (*this);
             }
 
-            node_ptr copy_tree(node_ptr parent, node_ptr node, const node_ptr ref){
-                if (ref && !ref->check)
+            node_ptr copy_tree(node_ptr parent, node_ptr node, const node_ptr ref, const node_ptr tnull){
+				
+				if (ref && !ref->check)
                 {
-                    node = copy_node(parent, node,  ref);
+                    node = copy_node(parent,  ref);
                     if (ref->left_child && !ref->left_child->check)
-                        node->left_child = copy_tree(node, node->left_child, ref->left_child);
+					{
+                        node->left_child = copy_tree(node, node->left_child, ref->left_child, tnull);
+					}
                     if (ref->right_child && !ref->right_child->check)
-                        node->right_child = copy_tree(node, node->right_child, ref->right_child); 
+                    {
+					  	node->right_child = copy_tree(node, node->right_child, ref->right_child, tnull); 
+					}
                 }
+				else
+					return this->_tnull;
                 return (node);
             }
 
-            node_ptr copy_node(node_ptr parent, node_ptr node, const node_ptr ref){
+            node_ptr copy_node(node_ptr parent, const node_ptr ref){
+				node_ptr	node;
+
                 node = this->_node_alloc.allocate(1);
+				this->_node_alloc.construct(node, *ref);
                 node->parent = parent;
                 node->check = 0;
                 node->left_child = this->_tnull;
                 node->right_child = this->_tnull;
                 node->color = ref->color;
-                this->_alloc.construct(&node->data, ref->data);
                 return (node);
             }
 
@@ -115,7 +124,6 @@ namespace ft
             }
 
             void clear(){
-				
                 this->destroy_tree(this->_root);
                 this->_root = this->_tnull;
             }
@@ -127,7 +135,7 @@ namespace ft
                 	    destroy_tree(node->left_child);
                 	if (node->right_child && !(node->right_child))
                     	destroy_tree(node->right_child);
-                	this->_alloc.destroy(&node->data);
+                	this->_node_alloc.destroy(node);
                 	this->_node_alloc.deallocate(node, 1);
 				}
             }
@@ -236,7 +244,7 @@ namespace ft
 			    node_ptr node = _node_alloc.allocate(1);
 			    node->parent = nullptr;
 			    node->check = 0;
-			    this->_alloc.construct(&node->data, key);
+			    this->_node_alloc.construct(node, key);
 			    node->left_child = _tnull;
 			    node->right_child = _tnull;
 			    node->color = 1;
@@ -477,7 +485,7 @@ namespace ft
 				y->left_child->parent = y;
 				y->color = z->color;
             }
-			_alloc.destroy(&z->data);	
+			_node_alloc.destroy(z);	
 			_node_alloc.deallocate(z, 1);
 			
 			if (y_original_color == 0)
@@ -558,8 +566,8 @@ namespace ft
 
 				std::string sColor = root->color ? "RED" : "BLACK";
 				std::cout << root->data.first << "," << root->data.second << "(" << sColor << ")" << std::endl;
-				printHelper(root->left_child, indent, false);
 				printHelper(root->right_child, indent, true);
+				printHelper(root->left_child, indent, false);
 			}
 		}
 		
@@ -628,6 +636,7 @@ namespace ft
 				s += sizeCalc(node->right_child);
 				s++;
 			}
+		
 			return s;
 		}
 

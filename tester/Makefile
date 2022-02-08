@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+         #
+#    By: jehaenec <jehaenec@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/20 11:57:14 by vneirinc          #+#    #+#              #
-#    Updated: 2021/12/21 14:50:36 by vneirinc         ###   ########.fr        #
+#    Updated: 2022/02/08 11:08:20 by jehaenec         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ ft: $(FTNAME)
 std: $(STDNAME)
 
 $(FTNAME):
-	$(MAKE) -f compile.mk NAME=$@ MAIN="main.cpp"
+	$(MAKE) -f compile.mk MORE="-DNOPRINT" NAME=$@ MAIN="main.cpp"
 
 $(STDNAME):
 	$(MAKE) -f compile.mk NAME=$@ MORE="-DNAMESPACE=std" MAIN="main.cpp"

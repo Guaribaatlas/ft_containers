@@ -14,9 +14,6 @@
 
 int	main(void)
 {
-	vector();
-	stack();
 	map();
-	system("leaks ft_test");
 	return 0;
 }

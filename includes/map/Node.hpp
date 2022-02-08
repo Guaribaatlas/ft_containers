@@ -17,6 +17,8 @@ namespace ft
 		bool	color;
 		bool	check;
 
+		Node(const value_type& val) : data(val) {}
+
 		Node* down_left(){
 			Node *where = this;
 			if (where->is_null())
