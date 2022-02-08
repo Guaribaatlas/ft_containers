@@ -24,7 +24,6 @@ int		main(void)
 	lst.clear();
 	is_empty(mp);
 	printSize(mp);
-
 	is_empty(mp2);
 	mp2 = mp;
 	is_empty(mp2);
@@ -33,7 +32,9 @@ int		main(void)
 	for (unsigned long int i = 3; i < mp.size(); ++i)
 		it++->second = i * 7;
 
+	std::cout << "segfault" << std::endl;
 	printSize(mp);
+	std::cout << "segfault" << std::endl;
 	printSize(mp2);
 
 	mp2.clear();
